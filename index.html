@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aliwal Robotics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single datasheet-like column — wordmark bar, short thesis, offerings as spec rows, contact line. */
+:root {
+  --bg: #eef0f1;        /* machined aluminium */
+  --surface: #f7f8f8;
+  --ink: #14181c;
+  --muted: #5b6570;
+  --rule: #cfd4d8;
+  --signal: #f2b100;    /* safety yellow, shapes only */
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111417; --surface: #171b1f; --ink: #e9ecee; --muted: #8e98a2; --rule: #2a3036; --signal: #f5bb1e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111417; --surface: #171b1f; --ink: #e9ecee; --muted: #8e98a2; --rule: #2a3036; --signal: #f5bb1e;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  padding-inline: clamp(16px, 5vw, 48px);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1040px; margin: 0 auto; }
+
+/* Header */
+header.bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.mark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.mark svg { width: 22px; height: 22px; flex: none; }
+.mark span {
+  font-family: var(--font-display);
+  font-stretch: 125%; font-weight: 750;
+  letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.95rem;
+}
+.bar a.cta {
+  font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none;
+  border: 1px solid var(--ink); padding: 8px 14px;
+}
+.bar a.cta:hover, .bar a.cta:focus-visible { background: var(--ink); color: var(--bg); }
+
+/* Hero */
+.hero {
+  display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 48px; align-items: end;
+  padding-block: clamp(56px, 10vw, 112px) clamp(48px, 7vw, 80px);
+}
+.eyebrow {
+  font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 20px;
+}
+h1 {
+  font-family: var(--font-display);
+  font-stretch: 112%; font-weight: 700;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  line-height: 1.02; letter-spacing: -0.02em;
+  margin: 0; text-wrap: balance;
+}
+h1 em { font-style: normal; font-stretch: 62%; font-weight: 500; color: var(--muted); }
+.lede { max-width: 46ch; margin: 24px 0 0; font-size: 1.125rem; color: var(--muted); }
+.arm { width: 100%; max-width: 320px; justify-self: end; color: var(--ink); }
+
+/* Offerings as spec rows */
+.specs { border-top: 1px solid var(--ink); }
+.row {
+  display: grid; grid-template-columns: 180px minmax(0, 1fr) minmax(0, 1.1fr); gap: 32px;
+  padding-block: 32px; border-bottom: 1px solid var(--rule);
+}
+.code { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); letter-spacing: 0.04em; display: flex; align-items: baseline; gap: 10px; }
+.code i { width: 8px; height: 8px; background: var(--signal); display: inline-block; flex: none; transform: translateY(-1px); }
+.row h2 {
+  font-family: var(--font-display); font-stretch: 112%; font-weight: 650;
+  font-size: 1.5rem; line-height: 1.15; margin: 0; text-wrap: balance;
+}
+.row p { margin: 0; color: var(--muted); max-width: 52ch; }
+.tags { list-style: none; padding: 0; margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.tags li { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink); }
+
+/* Contact */
+.contact {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 24px;
+  padding-block: clamp(56px, 8vw, 96px);
+}
+.contact h2 {
+  font-family: var(--font-display); font-stretch: 112%; font-weight: 700;
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem); line-height: 1.1; margin: 0; max-width: 18ch; text-wrap: balance;
+}
+.email { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.email a {
+  font-family: var(--font-mono); font-size: 1.05rem; color: var(--ink);
+  text-decoration: none; border-bottom: 2px solid var(--signal); padding-bottom: 2px;
+  user-select: all;
+}
+.email button {
+  font: 500 0.75rem/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase;
+  background: transparent; color: var(--muted); border: 1px solid var(--rule); padding: 8px 10px; cursor: pointer;
+}
+.email button:hover, .email button:focus-visible { color: var(--ink); border-color: var(--ink); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+  border-top: 1px solid var(--rule); padding-block: 24px 32px;
+  font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em;
+}
+
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; gap: 32px; }
+  .arm { justify-self: start; max-width: 220px; order: -1; }
+  .row { grid-template-columns: 1fr; gap: 12px; padding-block: 28px; }
+}
+</style>
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="bar">
+    <a class="mark" href="#top" aria-label="Aliwal Robotics home">
+      <svg viewBox="0 0 22 22" aria-hidden="true"><rect x="1" y="1" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="10" height="10" fill="var(--signal)"/></svg>
+      <span>Aliwal Robotics</span>
+    </a>
+    <a class="cta" href="/intake">Request a quote</a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Robotics hardware supply</p>
+        <h1>Robots and parts, sourced right <em>and shipped fast.</em></h1>
+        <p class="lede">We supply complete robots and the components inside them, checked for compliance and delivered on the timeline your build needs.</p>
+      </div>
+      <svg class="arm" viewBox="0 0 240 220" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="40" y="196" width="88" height="14" fill="var(--surface)"/>
+        <rect x="64" y="172" width="40" height="24" fill="var(--surface)"/>
+        <line x1="84" y1="172" x2="66" y2="92" stroke-width="10" stroke-linecap="square"/>
+        <line x1="66" y1="92" x2="170" y2="54" stroke-width="8" stroke-linecap="square"/>
+        <line x1="170" y1="54" x2="196" y2="98" stroke-width="6" stroke-linecap="square"/>
+        <circle cx="84" cy="172" r="11" fill="var(--bg)"/>
+        <circle cx="66" cy="92" r="10" fill="var(--signal)" stroke="currentColor"/>
+        <circle cx="170" cy="54" r="8" fill="var(--bg)"/>
+        <path d="M186 106 L196 98 L206 106 M186 106 L186 120 M206 106 L206 120"/>
+        <line x1="20" y1="210" x2="230" y2="210" stroke="var(--rule)" stroke-dasharray="4 4"/>
+      </svg>
+    </section>
+
+    <section class="specs" aria-label="What we offer">
+      <div class="row">
+        <div class="code"><i></i>Supply</div>
+        <h2>Robots &amp; components</h2>
+        <div>
+          <p>Complete systems or the parts to build and maintain them. Tell us the spec and we find the right unit at the right price.</p>
+          <ul class="tags"><li>Arms &amp; AMRs</li><li>Actuators</li><li>Reducers</li><li>Sensors</li><li>Grippers</li><li>Controllers</li></ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="code"><i></i>Compliance</div>
+        <h2>Compliance</h2>
+        <div>
+          <p>Every order comes with the paperwork it needs: certifications, declarations and export classification, checked before it ships.</p>
+          <ul class="tags"><li>CE</li><li>UL</li><li>RoHS</li><li>REACH</li><li>ISO 10218</li><li>HTS / ECCN</li></ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="code"><i></i>Logistics</div>
+        <h2>Quick delivery</h2>
+        <div>
+          <p>Lead times quoted up front, stock held where it shortens the wait, and expedited freight when a line is down.</p>
+          <ul class="tags"><li>Stocked parts</li><li>Expedited freight</li><li>Order tracking</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <h2>Send us a part number or a spec.</h2>
+      <div class="email">
+        <a id="email" href="mailto:hello@aliwalrobotics.com">hello@aliwalrobotics.com</a>
+        <button type="button" id="copy">Copy</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Aliwal Robotics</span>
+    <span>aliwalrobotics.com</span>
+  </footer>
+</div>
+
+<script>
+document.getElementById('copy').addEventListener('click', function () {
+  var btn = this, text = document.getElementById('email').textContent;
+  function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); }
+  try {
+    navigator.clipboard.writeText(text).then(done, select);
+  } catch (e) { select(); }
+  function select() {
+    var r = document.createRange(); r.selectNodeContents(document.getElementById('email'));
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+});
+</script>
+
+</body>
+</html>

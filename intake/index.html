@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aliwal Robotics Intake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: same datasheet column as the home page; the form reads like a request-for-quote sheet in four labelled blocks. */
+:root {
+  --bg: #eef0f1; --surface: #f7f8f8; --ink: #14181c; --muted: #5b6570; --rule: #cfd4d8; --signal: #f2b100; --error: #b3261e;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #111417; --surface: #171b1f; --ink: #e9ecee; --muted: #8e98a2; --rule: #2a3036; --signal: #f5bb1e; --error: #f2857c; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #111417; --surface: #171b1f; --ink: #e9ecee; --muted: #8e98a2; --rule: #2a3036; --signal: #f5bb1e; --error: #f2857c; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.6; padding-inline: clamp(16px, 5vw, 48px); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1040px; margin: 0 auto; }
+
+header.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 24px; border-bottom: 1px solid var(--rule); }
+.mark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.mark svg { width: 22px; height: 22px; flex: none; }
+.mark span { font-family: var(--font-display); font-stretch: 125%; font-weight: 750; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.95rem; }
+.back { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--ink); }
+
+.intro { padding-block: clamp(48px, 8vw, 88px) 40px; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
+h1 { font-family: var(--font-display); font-stretch: 112%; font-weight: 700; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.04; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.lede { max-width: 52ch; margin: 18px 0 0; font-size: 1.075rem; color: var(--muted); }
+
+form { border-top: 1px solid var(--ink); }
+fieldset { border: 0; margin: 0; padding: 32px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 32px; }
+legend { display: contents; }
+.code { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); letter-spacing: 0.04em; display: flex; align-items: baseline; gap: 10px; }
+.code i { width: 8px; height: 8px; background: var(--signal); display: inline-block; flex: none; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; min-width: 0; }
+.full { grid-column: 1 / -1; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+label, .group-label { font-size: 0.9rem; font-weight: 600; }
+.opt { font-weight: 400; color: var(--muted); font-size: 0.82rem; }
+input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], select, textarea {
+  font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--rule); border-radius: 0; padding: 10px 12px; width: 100%;
+}
+textarea { min-height: 120px; resize: vertical; font-family: var(--font-mono); font-size: 0.9rem; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--signal); outline-offset: 0; border-color: var(--ink); }
+.hint { font-size: 0.82rem; color: var(--muted); margin: 0; }
+
+.choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.chip span { display: inline-block; font-family: var(--font-mono); font-size: 0.82rem; padding: 7px 12px; border: 1px solid var(--rule); background: var(--surface); }
+.chip input:checked + span { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip input:focus-visible + span { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+.invalid input, .invalid select, .invalid textarea { border-color: var(--error); }
+.err { color: var(--error); font-size: 0.82rem; margin: 0; }
+
+.submit { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-block: 32px 64px; }
+.submit p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 52ch; }
+button[type="submit"] { font: 600 0.85rem/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; background: var(--ink); color: var(--bg); border: 1px solid var(--ink); padding: 14px 22px; cursor: pointer; }
+button[type="submit"]:hover { background: transparent; color: var(--ink); }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+.done { padding-block: 48px 80px; border-top: 1px solid var(--ink); }
+.done h2 { font-family: var(--font-display); font-stretch: 112%; font-weight: 700; font-size: 1.8rem; margin: 0 0 8px; }
+.done p { color: var(--muted); margin: 0; max-width: 52ch; }
+
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; border-top: 1px solid var(--rule); padding-block: 24px 32px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em; }
+
+@media (max-width: 760px) {
+  fieldset { grid-template-columns: 1fr; gap: 16px; }
+  .fields { grid-template-columns: 1fr; }
+}
+</style>
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="bar">
+    <a class="mark" href="/" aria-label="Aliwal Robotics home">
+      <svg viewBox="0 0 22 22" aria-hidden="true"><rect x="1" y="1" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="10" height="10" fill="var(--signal)"/></svg>
+      <span>Aliwal Robotics</span>
+    </a>
+    <a class="back" href="/">Home</a>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="eyebrow">Request for quote</p>
+      <h1>Tell us what you need.</h1>
+      <p class="lede">A part number, a spec sheet summary or a rough description is enough to start. We reply with pricing, lead time and the compliance documents that apply.</p>
+    </section>
+
+    <form id="intake" novalidate>
+      <fieldset>
+        <legend><span class="code"><i></i>Contact</span></legend>
+        <div class="fields">
+          <div class="field"><label for="name">Name</label><input type="text" id="name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="company">Company</label><input type="text" id="company" name="company" autocomplete="organization" required></div>
+          <div class="field"><label for="email">Work email</label><input type="email" id="email" name="email" autocomplete="email" required></div>
+          <div class="field"><label for="phone">Phone <span class="opt">optional</span></label><input type="tel" id="phone" name="phone" autocomplete="tel"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="code"><i></i>Request</span></legend>
+        <div class="fields">
+          <div class="field full">
+            <span class="group-label" id="type-label">Looking for</span>
+            <div class="choices" role="group" aria-labelledby="type-label">
+              <label class="chip"><input type="checkbox" name="type" value="Complete robots" id="t-robots"><span>Complete robots</span></label>
+              <label class="chip"><input type="checkbox" name="type" value="Components" id="t-components"><span>Components</span></label>
+              <label class="chip"><input type="checkbox" name="type" value="Spare parts" id="t-spares"><span>Spare parts</span></label>
+            </div>
+          </div>
+          <div class="field full">
+            <label for="items">Part numbers or specs</label>
+            <textarea id="items" name="items" required placeholder="e.g. Harmonic reducer, ratio 100:1, size 20 — qty 12"></textarea>
+            <p class="hint">One item per line. Manufacturer and model help if you have them.</p>
+          </div>
+          <div class="field"><label for="qty">Total quantity <span class="opt">optional</span></label><input type="number" id="qty" name="qty" min="1" inputmode="numeric"></div>
+          <div class="field"><label for="budget">Target budget <span class="opt">optional</span></label><input type="text" id="budget" name="budget" placeholder="e.g. USD 25,000"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="code"><i></i>Compliance</span></legend>
+        <div class="fields">
+          <div class="field full">
+            <span class="group-label" id="comp-label">Certifications required <span class="opt">select any</span></span>
+            <div class="choices" role="group" aria-labelledby="comp-label">
+              <label class="chip"><input type="checkbox" name="compliance" value="CE" id="c-ce"><span>CE</span></label>
+              <label class="chip"><input type="checkbox" name="compliance" value="UL" id="c-ul"><span>UL</span></label>
+              <label class="chip"><input type="checkbox" name="compliance" value="RoHS" id="c-rohs"><span>RoHS</span></label>
+              <label class="chip"><input type="checkbox" name="compliance" value="REACH" id="c-reach"><span>REACH</span></label>
+              <label class="chip"><input type="checkbox" name="compliance" value="ISO 10218" id="c-iso"><span>ISO 10218</span></label>
+              <label class="chip"><input type="checkbox" name="compliance" value="Not sure" id="c-unsure"><span>Not sure</span></label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="code"><i></i>Delivery</span></legend>
+        <div class="fields">
+          <div class="field"><label for="needby">Needed by</label><input type="date" id="needby" name="needby"></div>
+          <div class="field">
+            <label for="urgency">Urgency</label>
+            <select id="urgency" name="urgency">
+              <option value="Standard">Standard</option>
+              <option value="Expedited">Expedited</option>
+              <option value="Line down">Line down</option>
+            </select>
+          </div>
+          <div class="field"><label for="ship-city">Ship-to city</label><input type="text" id="ship-city" name="ship_city" autocomplete="address-level2"></div>
+          <div class="field"><label for="ship-country">Ship-to country</label><input type="text" id="ship-country" name="ship_country" autocomplete="country-name"></div>
+          <div class="field full"><label for="notes">Anything else <span class="opt">optional</span></label><textarea id="notes" name="notes" style="min-height:90px"></textarea></div>
+        </div>
+      </fieldset>
+
+      <div class="submit">
+        <p>We use these details only to prepare your quote.</p>
+        <button type="submit">Send request</button>
+      </div>
+    </form>
+
+    <section class="done" id="done" hidden>
+      <p class="eyebrow">Received</p>
+      <h2>Thanks. Your request is in.</h2>
+      <p>We'll reply to <span id="done-email"></span> with pricing and lead time.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Aliwal Robotics</span>
+    <span>aliwalrobotics.com/intake</span>
+  </footer>
+</div>
+
+<script>
+/* Set this to your form backend (e.g. a Formspree, Basin or your own API URL) when deploying.
+   While empty, the form validates and shows the confirmation without sending anything. */
+var FORM_ENDPOINT = "";
+
+(function () {
+  var form = document.getElementById('intake');
+  var required = ['name', 'company', 'email', 'items'];
+  var messages = { name: 'Enter your name.', company: 'Enter your company name.', email: 'Enter a work email, like you@company.com.', items: 'Add at least one part number or spec.' };
+
+  function setError(id, msg) {
+    var input = document.getElementById(id), field = input.closest('.field');
+    var old = field.querySelector('.err'); if (old) old.remove();
+    field.classList.toggle('invalid', !!msg);
+    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    if (msg) { var p = document.createElement('p'); p.className = 'err'; p.id = id + '-err'; p.textContent = msg; field.appendChild(p); input.setAttribute('aria-describedby', p.id); }
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var first = null;
+    required.forEach(function (id) {
+      var el = document.getElementById(id);
+      var bad = !el.value.trim() || (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim()));
+      setError(id, bad ? messages[id] : '');
+      if (bad && !first) first = el;
+    });
+    if (first) { first.focus(); return; }
+
+    var data = {};
+    new FormData(form).forEach(function (v, k) { data[k] = data[k] ? [].concat(data[k], v) : v; });
+
+    function showDone() {
+      document.getElementById('done-email').textContent = data.email;
+      form.hidden = true; document.getElementById('done').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    if (!FORM_ENDPOINT) { showDone(); return; }
+    var btn = form.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) })
+      .then(function (r) { if (!r.ok) throw new Error(); showDone(); })
+      .catch(function () { btn.disabled = false; btn.textContent = 'Send request'; setError('notes', 'We couldn’t send your request. Check your connection and try again, or email hello@aliwalrobotics.com.'); });
+  });
+})();
+</script>
+
+</body>
+</html>
