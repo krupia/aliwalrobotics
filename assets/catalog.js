@@ -1,7 +1,7 @@
 /* Aliwal Robotics: catalog of common products and the components we source for them.
    Used by the intake form's "Products and components" picker.
    To add an item, add a string to a group's "items". To add a product, add a group.
-   Brand names identify the products parts are for; we are not an authorized distributor unless a quote says so. */
+   Generic component names only: no brand or model names. */
 window.ALIWAL_CATALOG = [
   {
     section: "Robotics components",
@@ -26,10 +26,10 @@ window.ALIWAL_CATALOG = [
       ]},
       { product: "Teleoperation & imitation-learning rigs", items: [
         "Leader arms", "Follower arm kits", "Handheld data-collection grippers", "Wrist cameras",
-        "Smart servos (Dynamixel-class)", "3D mice & foot pedals"
+        "Smart servos", "3D mice & foot pedals"
       ]},
       { product: "Compute, perception & connectivity", items: [
-        "Edge AI modules (e.g. NVIDIA Jetson)", "Carrier boards", "RGB-D cameras", "Stereo cameras",
+        "Edge AI compute modules", "Carrier boards", "RGB-D cameras", "Stereo cameras",
         "Industrial cameras & lenses", "GNSS / RTK modules", "Wi-Fi / 5G radios", "EtherCAT / CAN interfaces"
       ]}
     ]
@@ -38,16 +38,16 @@ window.ALIWAL_CATALOG = [
     section: "Data collection devices",
     groups: [
       { product: "VR / MR headsets", items: [
-        "Meta Quest 3 / 3S", "PICO 4 Ultra / Enterprise", "Apple Vision Pro", "HTC VIVE Focus Vision", "Varjo XR-4",
-        "Replacement controllers", "Battery head straps", "Facial interfaces & lens spacers", "Charging docks"
+        "Standalone VR / MR headsets", "PC-tethered VR headsets", "Replacement controllers", "Hand / body trackers",
+        "Battery head straps", "Facial interfaces & lens spacers", "Prescription lens inserts", "Charging docks"
       ]},
       { product: "Smart glasses & egocentric cameras", items: [
-        "Ray-Ban Meta glasses", "Head-mounted action cameras (GoPro-class)", "360° cameras (Insta360-class)",
+        "Camera smart glasses", "Head-mounted action cameras", "360° cameras",
         "Head & chest mounts", "Spare camera batteries", "High-endurance microSD cards"
       ]},
       { product: "Motion capture & hand tracking", items: [
         "Data gloves (finger tracking)", "Inertial mocap suits", "Optical mocap cameras & markers",
-        "Hand-tracking sensors", "VIVE Trackers", "SteamVR base stations"
+        "Hand-tracking sensors", "Body trackers", "Tracking base stations"
       ]},
       { product: "Capture accessories", items: [
         "Rugged portable SSDs", "Power banks & charging hubs", "Calibration targets (ChArUco / checkerboard)",
