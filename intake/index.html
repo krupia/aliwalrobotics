@@ -169,6 +169,11 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
         </div>
       </fieldset>
 
+      <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+        <label for="website">Leave this field empty</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
       <div class="submit">
         <p>We use these details only to prepare your quote.</p>
         <button type="submit">Send request</button>
@@ -189,9 +194,10 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
 </div>
 
 <script>
-/* Set this to your form backend (e.g. a Formspree, Basin or your own API URL) when deploying.
-   While empty, the form validates and shows the confirmation without sending anything. */
+/* Google Apps Script web app URL (ends in /exec) that appends each request to the leads Sheet.
+   While empty, the form does not pretend to send: it asks the visitor to email instead. */
 var FORM_ENDPOINT = "";
+var CONTACT_EMAIL = "hello@aliwalrobotics.com";
 
 (function () {
   var form = document.getElementById('intake');
@@ -217,19 +223,37 @@ var FORM_ENDPOINT = "";
     });
     if (first) { first.focus(); return; }
 
-    var data = {};
-    new FormData(form).forEach(function (v, k) { data[k] = data[k] ? [].concat(data[k], v) : v; });
+    var fd = new FormData(form);
+    var email = fd.get('email');
 
     function showDone() {
-      document.getElementById('done-email').textContent = data.email;
+      document.getElementById('done-email').textContent = email;
       form.hidden = true; document.getElementById('done').hidden = false;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    if (!FORM_ENDPOINT) { showDone(); return; }
-    var btn = form.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = 'Sending…';
-    fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) })
-      .then(function (r) { if (!r.ok) throw new Error(); showDone(); })
-      .catch(function () { btn.disabled = false; btn.textContent = 'Send request'; setError('notes', 'We couldn’t send your request. Check your connection and try again, or email hello@aliwalrobotics.com.'); });
+    var btn = form.querySelector('button[type="submit"]');
+    function fail(msg) { btn.disabled = false; btn.textContent = 'Send request'; setError('notes', msg); }
+
+    if (!FORM_ENDPOINT) {
+      fail('Online requests are not switched on yet. Please email your request to ' + CONTACT_EMAIL + '.');
+      return;
+    }
+    if (fd.get('website')) { showDone(); return; } /* bot filled the hidden field: drop quietly */
+
+    var body = new URLSearchParams();
+    ['name','company','email','phone','items','qty','budget','needby','urgency','ship_city','ship_country','notes'].forEach(function (k) {
+      body.append(k, (fd.get(k) || '').toString().trim());
+    });
+    body.append('type', fd.getAll('type').join(', '));
+    body.append('compliance', fd.getAll('compliance').join(', '));
+    body.append('page', location.href);
+
+    btn.disabled = true; btn.textContent = 'Sending…';
+    /* Apps Script web apps don't answer CORS preflights, so post as a simple form request.
+       The response is opaque; a network failure still rejects and shows the error. */
+    fetch(FORM_ENDPOINT, { method: 'POST', mode: 'no-cors', body: body })
+      .then(showDone)
+      .catch(function () { fail('We couldn’t send your request. Check your connection and try again, or email ' + CONTACT_EMAIL + '.'); });
   });
 })();
 </script>
